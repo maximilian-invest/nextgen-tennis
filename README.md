@@ -1,3 +1,50 @@
+# NextGen Tennisacademy — Website
+
+Production implementation of the NextGen Tennisacademy design (Leistungstennis in
+Hallein, Salzburg), rebuilt from the design handoff bundle as a **Next.js (App
+Router) + React + TypeScript** site.
+
+## Run it
+
+```bash
+npm install
+npm run dev      # dev server at http://localhost:3000
+npm run build    # production build (all pages prerender to static HTML)
+npm start        # serve the production build
+```
+
+## Structure
+
+- `app/` — one route per page: `/` (home), `/programme`, `/trainer`, `/standort`,
+  `/galerie`, `/news`, `/preise`, `/kontakt`. `layout.tsx` wraps every page with the
+  shared nav, footer, and client-side effects. `globals.css` holds the full brand
+  system (tokens, shared website styles, and per-page styles).
+- `components/` — shared `Nav`, `Footer`, `PageHead`, the `SiteEffects` module
+  (custom cursor, scroll reveals, counters, magnetic buttons, parallax, lime page
+  transition), and the interactive pieces: `CoachExplorer` (trainer profile modal),
+  `Gallery` (filter + lightbox), `NewsList` (filter + newsletter), `ContactForm`
+  (2-step booking form).
+- `lib/site.ts` — navigation config + brand constants (single source of truth, so
+  nav/footer never drift).
+- `public/assets/brand/` — logos, the `ng-mark` monogram, and the hero video.
+
+## Notes for the brand owner
+
+- **Images are still the branded "court-line" placeholders** (as in the design), and
+  the hero uses the bundled Alex Lindenbauer video. Drop real photos into
+  `public/assets/brand/` (or the gallery/news/coach data arrays) to replace them.
+- The design's custom wordmark font is approximated with **Saira Condensed** — supply
+  the original `.otf`/`.ttf` to match the logo exactly.
+- The contact form and newsletter are front-end mocks (no backend yet).
+- Fixed one latent inconsistency from the prototype: the Trainer stat bar read
+  "3 Standorte", which contradicts the final single-location (Hallein) content — it
+  now reads "Hallein · Standort".
+
+The original design handoff bundle is preserved under `project/` and `chats/` for
+reference. Its instructions follow.
+
+---
+
 # CODING AGENTS: READ THIS FIRST
 
 This is a **handoff bundle** from Claude Design (claude.ai/design).
