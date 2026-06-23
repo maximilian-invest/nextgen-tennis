@@ -193,7 +193,10 @@ section { position: relative; }
 .nav-links a:hover, .nav-links a.active { color: var(--ng-lime); }
 .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 .nav-right { display: flex; align-items: center; gap: 1.1rem; }
-.burger { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: none; border: none; padding: 8px; min-width: 44px; min-height: 44px; }
+/* position:relative + z-index keeps the close button ABOVE the full-screen menu
+   (a sibling at z-index 999 inside the nav's stacking context); otherwise the
+   non-positioned button is painted behind the open menu and can't be seen. */
+.burger { display: none; position: relative; z-index: 1001; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: none; border: none; padding: 8px; min-width: 44px; min-height: 44px; }
 .burger span { display: block; width: 26px; height: 2px; background: #fff; transition: transform 0.3s var(--ease), opacity 0.2s var(--ease); }
 /* Open state shows an explicit ✕ close glyph (rendered in markup, not a CSS
    transform — works regardless of browser/transition support). */
