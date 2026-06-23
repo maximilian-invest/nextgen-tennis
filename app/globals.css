@@ -201,7 +201,7 @@ section { position: relative; }
 /* Open state shows an explicit ✕ close glyph (rendered in markup, not a CSS
    transform — works regardless of browser/transition support). */
 .burger.active { color: #fff; }
-.burger-x { display: block; width: 26px; height: 26px; font-size: 30px; line-height: 26px; text-align: center; color: #fff; }
+.burger-x { display: block; width: 34px; height: 34px; font-size: 40px; line-height: 34px; text-align: center; color: var(--ng-lime); }
 
 @media (max-width: 1040px) {
   .nav-links, .nav-right .btn { display: none; }
