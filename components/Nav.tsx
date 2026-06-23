@@ -44,7 +44,7 @@ export default function Nav() {
     href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/');
 
   return (
-    <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
+    <nav className={`nav${scrolled ? ' scrolled' : ''}${open ? ' nav-open' : ''}`}>
       <Link href="/" aria-label="NextGen Tennis Academy">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="nav-logo" src={asset('/assets/brand/logo-white.png')} alt="NextGen Tennis Academy" />

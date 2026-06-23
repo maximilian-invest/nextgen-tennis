@@ -176,6 +176,13 @@ section { position: relative; }
   background: rgba(19,49,59,0.82); backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid var(--ng-line-dark); padding-block: 0.65rem;
 }
+/* While the mobile menu is open the nav must NOT establish a containing block
+   (backdrop-filter does), or the fixed full-screen menu gets clipped to the
+   nav bar instead of filling the viewport. */
+.nav.nav-open {
+  background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-color: transparent; box-shadow: none;
+}
 .nav-logo { height: 26px; width: auto; }
 .nav-links { display: flex; align-items: center; gap: 2rem; }
 .nav-links a {
