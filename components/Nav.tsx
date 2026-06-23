@@ -71,13 +71,21 @@ export default function Nav() {
 
       <button
         className={`burger${open ? ' active' : ''}`}
-        aria-label="Menü"
+        aria-label={open ? 'Menü schließen' : 'Menü öffnen'}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
-        <span></span>
-        <span></span>
-        <span></span>
+        {open ? (
+          <span className="burger-x" aria-hidden="true">
+            ✕
+          </span>
+        ) : (
+          <>
+            <span></span>
+            <span></span>
+            <span></span>
+          </>
+        )}
       </button>
     </nav>
   );
