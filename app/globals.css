@@ -187,7 +187,11 @@ section { position: relative; }
 .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 .nav-right { display: flex; align-items: center; gap: 1.1rem; }
 .burger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 8px; }
-.burger span { width: 26px; height: 2px; background: #fff; transition: 0.3s var(--ease); }
+.burger span { display: block; width: 26px; height: 2px; background: #fff; transition: transform 0.3s var(--ease), opacity 0.2s var(--ease); }
+/* Hamburger → X when the mobile menu is open (gap 5px + 2px bars ⇒ 7px shift). */
+.burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.active span:nth-child(2) { opacity: 0; }
+.burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 @media (max-width: 1040px) {
   .nav-links, .nav-right .btn { display: none; }
