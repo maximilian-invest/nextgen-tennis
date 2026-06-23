@@ -23,6 +23,23 @@ export default function Nav() {
     setOpen(false);
   }, [pathname]);
 
+  /* Prevent the page behind the full-screen mobile menu from scrolling. */
+  useEffect(() => {
+    const root = document.documentElement;
+    const { body } = document;
+    if (open) {
+      root.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
+    } else {
+      root.style.overflow = '';
+      body.style.overflow = '';
+    }
+    return () => {
+      root.style.overflow = '';
+      body.style.overflow = '';
+    };
+  }, [open]);
+
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/');
 
