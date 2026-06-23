@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trainer Deck — NextGen Tennis Academy</title>
+<link rel="stylesheet" href="../assets/brand/tokens.css">
+<link rel="icon" href="../assets/brand/ng-mark.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: #000; overflow: hidden; font-family: var(--font-sans); color: var(--ng-ink); }
+
+.viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+.stage { width: 1920px; height: 1080px; position: relative; transform-origin: center center; background: var(--ng-paper); }
+
+.slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; display: none; }
+.slide.active { display: block; }
+
+.nav-ui { position: fixed; bottom: 18px; right: 18px; z-index: 50; display: flex; gap: 8px; align-items: center; }
+.nav-ui button { width: 44px; height: 44px; border: none; border-radius: 999px; background: rgba(255,255,255,0.14); color: #fff; font-size: 1.1rem; cursor: pointer; }
+.nav-ui button:hover { background: rgba(255,255,255,0.28); }
+.nav-ui .pg { color: rgba(255,255,255,0.6); font-family: var(--font-mono); font-size: 12px; margin-right: 6px; }
+
+/* ---- shared ---- */
+.eyebrow { font-weight: 700; font-size: 26px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ng-lime-600); }
+.eyebrow.on-dark { color: var(--ng-lime); }
+.display { font-family: var(--font-display); font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 0.86; letter-spacing: -0.01em; color: var(--ng-petrol); }
+.dot { color: var(--ng-lime); }
+.mono { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; }
+.court-media { position: relative; background: linear-gradient(135deg, var(--ng-petrol) 0%, var(--ng-petrol-700) 60%, var(--ng-petrol-900) 100%); overflow: hidden; }
+.court-lines { position: absolute; inset: 14%; border: 2px solid rgba(255,255,255,0.22); }
+.court-lines::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.16); }
+.court-lines::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: rgba(187,207,0,0.6); }
+.media-tag { position: absolute; left: 24px; bottom: 20px; font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.08em; color: rgba(255,255,255,0.55); z-index: 2; }
+.media-mark { position: absolute; right: 24px; top: 24px; width: 64px; height: 64px; opacity: 0.92; z-index: 2; }
+.tag { font-family: var(--font-mono); font-size: 20px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ng-lime-600); border: 2px solid var(--ng-line); padding: 8px 18px; border-radius: 999px; }
+
+/* ---- slide 1: title ---- */
+.s-title { background: var(--ng-petrol); color: #fff; padding: 110px 130px; display: flex; flex-direction: column; }
+.s-title .court-lines { inset: -20% -5% -20% 58%; }
+.s-title .logo { height: 44px; width: auto; }
+.s-title .mid { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
+.s-title h1 { font-size: 290px; color: #fff; }
+.s-title .lead { font-size: 40px; line-height: 1.45; color: var(--ng-on-dark-2); max-width: 1050px; margin-top: 48px; }
+.s-title .statrow { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; background: var(--ng-lime); border-radius: 22px; padding: 44px 56px; }
+.s-title .stat .n { font-family: var(--font-display); font-style: italic; font-weight: 900; font-size: 72px; color: var(--ng-petrol); line-height: 0.85; }
+.s-title .stat .c { font-weight: 700; font-size: 22px; letter-spacing: 0.12em; text-transform: uppercase; color: #3c4a08; margin-top: 12px; }
+
+/* ---- slide 2: team ---- */
+.s-team { background: var(--ng-paper); padding: 90px 130px; display: flex; flex-direction: column; }
+.s-team .head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 60px; }
+.s-team h2 { font-size: 130px; }
+.s-team .cards { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; }
+.t-card { background: #fff; border: 2px solid var(--ng-line); border-radius: 32px; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); }
+.t-card .ph { height: 300px; }
+.t-card .ph .court-lines { inset: 16% 14%; }
+.t-card .body { padding: 44px 44px 48px; display: flex; flex-direction: column; flex: 1; }
+.t-card .role { font-family: var(--font-mono); font-size: 21px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ng-lime-600); }
+.t-card h3 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 56px; color: var(--ng-petrol); line-height: 0.95; margin: 16px 0 22px; }
+.t-card p { color: var(--ng-slate); font-size: 26px; line-height: 1.5; }
+.t-card .creds { margin-top: auto; padding-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ---- portrait slides ---- */
+.s-coach { background: #fff; display: grid; grid-template-columns: 680px 1fr; }
+.s-coach .media { height: 1080px; }
+.s-coach .content { padding: 90px 110px 80px; display: flex; flex-direction: column; }
+.s-coach .role { font-family: var(--font-mono); font-size: 24px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ng-lime-600); }
+.s-coach h2 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; line-height: 0.92; color: var(--ng-petrol); font-size: 110px; margin: 18px 0 30px; }
+.s-coach .lead { font-size: 33px; line-height: 1.45; color: var(--ng-ink); font-weight: 600; margin-bottom: 40px; max-width: 980px; }
+.s-coach p.body-text { color: var(--ng-slate); font-size: 27px; line-height: 1.55; margin-bottom: 26px; max-width: 1000px; }
+.s-coach p.strong { color: var(--ng-petrol); font-weight: 700; }
+.s-coach .stats { display: grid; grid-template-columns: repeat(6, 1fr); border: 2px solid var(--ng-line); border-radius: 14px; overflow: hidden; margin-bottom: 44px; }
+.s-coach .stats .st { padding: 26px 28px; border-right: 2px solid var(--ng-line); }
+.s-coach .stats .st:last-child { border-right: none; }
+.s-coach .stats .n { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 44px; color: var(--ng-petrol); line-height: 1; }
+.s-coach .stats .c { font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ng-slate); margin-top: 10px; }
+.s-coach .creds { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
+
+/* ---- CTA slide ---- */
+.s-cta { background: var(--ng-petrol-900); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
+.s-cta .court-lines { inset: 12% 20%; }
+.s-cta .inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+.s-cta h2 { font-size: 220px; color: #fff; }
+.s-cta .contact { margin-top: 70px; font-size: 38px; color: var(--ng-on-dark-2); line-height: 1.6; }
+.s-cta .contact strong { color: var(--ng-lime); font-weight: 700; }
+.s-cta .logo { height: 40px; margin-top: 90px; opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="viewport">
+<div class="stage" id="stage">
+
+  <!-- SLIDE 1 — TITLE -->
+  <section class="slide s-title active" data-screen-label="01 Titel">
+    <div class="court-lines"></div>
+    <img class="logo" src="../assets/brand/logo-white.png" alt="NextGen Tennis Academy">
+    <div class="mid">
+      <p class="eyebrow on-dark" style="margin-bottom:36px;">Das Team hinter NextGen</p>
+      <h1 class="display">Trainer<span class="dot">.</span></h1>
+      <p class="lead">Lizenzierte Coaches, ein Ex-Profi und ein Athletiktrainer. Ein Team, das qualitativ hochwertige Betreuung für Spieler aller Leistungsstufen gewährleistet.</p>
+    </div>
+    <div class="statrow">
+      <div class="stat"><div class="n">3</div><div class="c">Coaches im Team</div></div>
+      <div class="stat"><div class="n">8</div><div class="c">Plätze in Hallein</div></div>
+      <div class="stat"><div class="n">1:4</div><div class="c">max. Gruppe</div></div>
+      <div class="stat"><div class="n">2025</div><div class="c">gegründet</div></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2 — TEAM OVERVIEW -->
+  <section class="slide s-team" data-screen-label="02 Team">
+    <div class="head">
+      <div>
+        <p class="eyebrow" style="margin-bottom:24px;">Trainerteam</p>
+        <h2 class="display">Das Team<span class="dot">.</span></h2>
+      </div>
+      <img src="../assets/brand/ng-mark.png" alt="" style="width:90px;height:90px;">
+    </div>
+    <div class="cards">
+      <div class="t-card">
+        <div class="ph court-media"><div class="court-lines"></div><span class="media-tag">FOTO · ALEXANDER</span></div>
+        <div class="body"><span class="role">Head Coach · Gründer</span><h3>Alexander Lindenbauer</h3><p>Staatlich geprüfter Tennislehrer mit MSc in Sport- und Bewegungswissenschaften. Treibende Kraft hinter der Academy.</p><div class="creds"><span class="tag">MSc Sportwiss.</span><span class="tag">Tennislehrer</span></div></div>
+      </div>
+      <div class="t-card">
+        <div class="ph court-media"><div class="court-lines"></div><span class="media-tag">FOTO · JAKOB</span></div>
+        <div class="body"><span class="role">Ex-Profi · Performance</span><h3>Jakob Aichhorn</h3><p>Ehemaliger Profispieler. Entwickelt das Konzept für die Förderung der nächsten Generation im Leistungstennis.</p><div class="creds"><span class="tag">Ex-Profi</span><span class="tag">Performance</span></div></div>
+      </div>
+      <div class="t-card">
+        <div class="ph court-media"><div class="court-lines"></div><span class="media-tag">FOTO · ROBERT</span></div>
+        <div class="body"><span class="role">Athletiktrainer</span><h3>Robert Eckschlager</h3><p>Verantwortlich für die athletische Betreuung der Spieler on &amp; off court — bereit für die Belastung im Leistungstennis.</p><div class="creds"><span class="tag">Athletik</span><span class="tag">On &amp; off court</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 — JAKOB -->
+  <section class="slide s-coach" data-screen-label="03 Jakob Aichhorn">
+    <div class="media court-media"><div class="court-lines"></div><img class="media-mark" src="../assets/brand/ng-mark.png" alt=""><span class="media-tag">FOTO · JAKOB AICHHORN</span></div>
+    <div class="content">
+      <span class="role">Trainer-Vorstellung · Ex-Profi · Performance</span>
+      <h2>Jakob Aichhorn<span class="dot">.</span></h2>
+      <div class="stats">
+        <div class="st"><div class="n">946</div><div class="c">ATP-Hoch</div></div>
+        <div class="st"><div class="n">Nr. 1</div><div class="c">Jugend AUT</div></div>
+        <div class="st"><div class="n">Top 150</div><div class="c">Jugend Intl.</div></div>
+        <div class="st"><div class="n">2021</div><div class="c">Österr. Meister</div></div>
+        <div class="st"><div class="n">2022</div><div class="c">Vizemeister</div></div>
+        <div class="st"><div class="n">6 J.</div><div class="c">Trainer</div></div>
+      </div>
+      <p class="body-text">Jakob bringt auf und neben dem Platz beeindruckende Erfahrung mit. Als ehemaliger Profi erreichte er ein Karrierehoch von ATP-Rang 946. Bereits in seiner Jugend war er die Nummer 1 Österreichs und gehörte international zu den Top 150 der Jugendrangliste.</p>
+      <p class="body-text">2021 wurde er österreichischer Meister, 2022 Vizestaatsmeister. Aktuell ist er weiterhin als aktiver Spieler in der österreichischen Bundesliga im Einsatz.</p>
+      <p class="body-text">Seit sechs Jahren ist Jakob als Trainer tätig — mit Spielerinnen und Spielern aller Altersklassen und Leistungsstufen, vom Nachwuchs bis zum ambitionierten Turnierspieler. Mit seiner Erfahrung aus dem internationalen Spitzensport unterstützt er seine Schützlinge dabei, ihr volles Potenzial auszuschöpfen.</p>
+      <p class="body-text strong">Wir sind stolz, Jakob im Trainerteam zu haben — gemeinsam fördern wir die nächste Generation von Tennisspielern!</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 — ALEXANDER -->
+  <section class="slide s-coach" data-screen-label="04 Alexander Lindenbauer">
+    <div class="media court-media"><div class="court-lines"></div><img class="media-mark" src="../assets/brand/ng-mark.png" alt=""><span class="media-tag">FOTO · ALEXANDER LINDENBAUER</span></div>
+    <div class="content" style="justify-content:center;">
+      <span class="role">Trainer-Vorstellung · Head Coach · Gründer</span>
+      <h2>Alexander Lindenbauer<span class="dot">.</span></h2>
+      <p class="lead">Staatlich geprüfter Tennislehrer, Sportwissenschaftler — und die treibende Kraft hinter der NextGen Tennis Academy.</p>
+      <p class="body-text">Alexander ist staatlich geprüfter Tennislehrer und hält einen MSc in Sport- und Bewegungswissenschaften. Als Gründer und Head Coach verantwortet er das Trainings- und Leistungskonzept der Academy — von der Nachwuchsförderung bis zum ambitionierten Turniertennis.</p>
+      <p class="body-text strong">Sein Anspruch: jede Spielerin und jeden Spieler individuell kennen und gezielt weiterentwickeln. Bei NextGen ist kein Spieler nur eine Nummer.</p>
+      <div class="creds"><span class="tag">MSc Sportwiss.</span><span class="tag">Staatl. gepr. Tennislehrer</span><span class="tag">Gründer</span></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5 — ROBERT -->
+  <section class="slide s-coach" data-screen-label="05 Robert Eckschlager">
+    <div class="media court-media"><div class="court-lines"></div><img class="media-mark" src="../assets/brand/ng-mark.png" alt=""><span class="media-tag">FOTO · ROBERT ECKSCHLAGER</span></div>
+    <div class="content" style="justify-content:center;">
+      <span class="role">Trainer-Vorstellung · Athletiktrainer</span>
+      <h2>Robert Eckschlager<span class="dot">.</span></h2>
+      <p class="lead">Verantwortlich für die athletische Entwicklung unserer Spielerinnen und Spieler — on &amp; off court.</p>
+      <p class="body-text">Robert betreut die Spielerinnen und Spieler der Academy in allen athletischen Belangen. Er bereitet jeden Körper gezielt auf die Belastungen im Leistungstennis vor — von der Grundlagenarbeit im Nachwuchs bis zur Vorbereitung ambitionierter Turnierspieler.</p>
+      <div class="creds"><span class="tag">Athletik</span><span class="tag">On &amp; off court</span></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 — CTA -->
+  <section class="slide s-cta" data-screen-label="06 Kontakt">
+    <div class="court-lines"></div>
+    <div class="inner">
+      <p class="eyebrow on-dark" style="margin-bottom:40px;">Lern uns kennen</p>
+      <h2 class="display">Triff dein Team<span class="dot">.</span></h2>
+      <p class="contact"><strong>office@nextgen-tennisacademy.at</strong><br>1. Halleiner Tennisclub · Hallein · Salzburg</p>
+      <img class="logo" src="../assets/brand/logo-white.png" alt="NextGen Tennis Academy">
+    </div>
+  </section>
+
+</div>
+</div>
+
+<div class="nav-ui">
+  <span class="pg" id="pg">1 / 6</span>
+  <button id="prev" aria-label="Zurück">←</button>
+  <button id="next" aria-label="Weiter">→</button>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var cur = 0;
+  function render(){
+    slides.forEach(function(s,i){ s.classList.toggle('active', i===cur); });
+    var pg = document.getElementById('pg'); if (pg) pg.textContent = (cur+1) + ' / ' + slides.length;
+  }
+  window.goToSlide = function(n){ cur = Math.max(0, Math.min(slides.length-1, n)); render(); };
+  document.getElementById('prev').addEventListener('click', function(){ goToSlide(cur-1); });
+  document.getElementById('next').addEventListener('click', function(){ goToSlide(cur+1); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') goToSlide(cur+1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') goToSlide(cur-1);
+  });
+  var stage = document.getElementById('stage');
+  function fit(){
+    if (stage.hasAttribute('noscale')) { stage.style.transform = 'none'; return; }
+    var s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  new MutationObserver(fit).observe(stage, { attributes: true, attributeFilter: ['noscale'] });
+  window.addEventListener('resize', fit);
+  fit(); render();
+})();
+</script>
+</body>
+</html>

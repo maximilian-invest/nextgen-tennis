@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NextGen Tennisacademy — Leistungstennis in Hallein, Salzburg</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="assets/brand/ng-mark.png">
+<style>
+/* ---------- HERO ---------- */
+.hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; color: #fff; overflow: hidden; background: var(--ng-petrol); }
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.hero-scrim { position: absolute; inset: 0; z-index: 1; background:
+  linear-gradient(180deg, rgba(8,26,32,0.35) 0%, rgba(8,26,32,0.45) 38%, rgba(8,26,32,0.94) 100%),
+  linear-gradient(90deg, rgba(8,26,32,0.75), transparent 62%); }
+.hero .court-lines { inset: 7% 5%; border-color: rgba(255,255,255,0.12); z-index: 1; }
+.hero-in { position: relative; z-index: 3; padding-bottom: clamp(3.5rem, 7vh, 6rem); padding-top: 9rem; margin-left: 0; margin-right: auto; }
+.hero h1 { font-family: var(--font-display); font-weight: 900; font-style: italic; text-transform: uppercase; font-size: clamp(2.6rem, 1rem + 6.4vw, 6.4rem); line-height: 0.86; letter-spacing: -0.01em; }
+.hero h1 .ball { display: inline-block; width: 0.62em; height: 0.62em; border-radius: 50%; background: var(--ng-lime); vertical-align: -0.02em; margin-left: 0.05em; position: relative; box-shadow: 0 0 30px rgba(187,207,0,0.5); }
+.hero h1 .ball::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(135deg, transparent 46%, rgba(255,255,255,0.85) 47%, rgba(255,255,255,0.85) 50%, transparent 51%); }
+.line-mask { display: block; overflow: hidden; padding-block: 0.04em; }
+.line-mask > span { display: block; transform: translateY(110%) skewX(-8deg); white-space: nowrap; }
+.hero.loaded .line-mask > span { transform: none; transition: transform 0.9s var(--ease-out); }
+.hero.loaded .line-mask:nth-child(1) > span { transition-delay: 0.05s; }
+.hero.loaded .line-mask:nth-child(2) > span { transition-delay: 0.15s; }
+.hero.loaded .line-mask:nth-child(3) > span { transition-delay: 0.25s; }
+.hero p.hlead { font-size: clamp(1.05rem, 1rem + 0.5vw, 1.4rem); line-height: 1.5; max-width: 52ch; color: #cfdbdf; margin: 1.6rem 0 2.2rem; }
+.hero-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+.hero-side { position: absolute; right: clamp(1.25rem,4vw,3rem); top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.45); z-index: 3; }
+@media (max-width: 900px) { .hero-side { display: none; } }
+
+/* ---------- PHILOSOPHY SPLIT ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+
+/* ---------- PROGRAMS ---------- */
+.prog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+@media (max-width: 760px) { .prog-grid { grid-template-columns: 1fr; } }
+.prog { position: relative; background: #fff; border: 1px solid var(--ng-line); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease); display: grid; grid-template-columns: 150px 1fr; min-height: 200px; }
+.prog:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.prog .media { position: relative; }
+.prog .court-lines { inset: 16% 14%; transition: transform 0.4s var(--ease); }
+.prog:hover .court-lines { transform: scale(1.06); }
+.prog .body { padding: 1.6rem 1.8rem; display: flex; flex-direction: column; }
+.prog .idx { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ng-lime-600); letter-spacing: 0.06em; }
+.prog h3 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 1.7rem; color: var(--ng-petrol); margin: 0.5rem 0 0.5rem; line-height: 0.95; }
+.prog p { color: var(--ng-slate); font-size: 0.95rem; line-height: 1.5; margin: 0; }
+.prog .go { margin-top: auto; padding-top: 1rem; font-weight: 800; font-size: 0.85rem; color: var(--ng-lime-600); display: inline-flex; gap: 0.4rem; align-items: center; }
+@media (max-width: 480px) { .prog { grid-template-columns: 1fr; } .prog .media { height: 120px; } }
+
+/* ---------- FACILITY (dark) ---------- */
+.feat-grid { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 1.1rem; }
+.feat-grid .court-media { min-height: 220px; }
+.feat-grid .big { grid-row: span 2; min-height: 100%; }
+@media (max-width: 760px) { .feat-grid { grid-template-columns: 1fr; } .feat-grid .big { grid-row: auto; } }
+
+/* ---------- COACHES strip ---------- */
+.coach-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+@media (max-width: 760px) { .coach-row { grid-template-columns: 1fr 1fr; } }
+.coach .ph { position: relative; aspect-ratio: 3/4; border-radius: var(--r-lg); overflow: hidden; margin-bottom: 0.9rem; }
+.coach .ph .court-lines { inset: 18% 16%; }
+.coach h4 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 1.3rem; color: var(--ng-petrol); margin: 0; line-height: 0.98; }
+.coach .role { font-size: 0.85rem; color: var(--ng-slate); margin-top: 0.2rem; }
+
+/* ---------- CHAMPIONS ---------- */
+.champ-row { display: flex; align-items: center; gap: 1.5rem; padding: 1.2rem 0; border-bottom: 1px solid var(--ng-line); transition: 0.3s var(--ease); }
+.champ-row:hover { padding-left: 0.8rem; }
+.champ-row .rank { font-family: var(--font-mono); font-size: 0.85rem; color: var(--ng-lime-600); width: 2.6rem; }
+.champ-row .name { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: clamp(1.3rem, 3vw, 2.2rem); color: var(--ng-petrol); flex: 1; line-height: 1; }
+.champ-row .cmeta { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ng-slate); text-align: right; }
+
+/* ---------- CTA band ---------- */
+.cta-band { background: var(--ng-petrol); color: #fff; border-radius: var(--r-xl); padding: clamp(2.5rem, 5vw, 5rem); position: relative; overflow: hidden; }
+.cta-band .court-lines { inset: 0 0 0 58%; border-color: rgba(255,255,255,0.1); }
+.cta-band-in { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 2.5rem; flex-wrap: wrap; }
+.cta-band h2 { color: #fff; }
+</style>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#081A20">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#081A20"/>
+    <circle cx="600" cy="360" r="120" fill="#BBCF00"/>
+    <path d="M520 300 Q600 360 520 420 M680 300 Q600 360 680 420" stroke="#fff" stroke-width="10" fill="none" opacity="0.85"/>
+    <text x="600" y="560" font-family="Arial Black, sans-serif" font-weight="900" font-style="italic" font-size="96" fill="#fff" text-anchor="middle" letter-spacing="2">NEXTGEN</text>
+    <text x="600" y="610" font-family="Arial, sans-serif" font-size="28" fill="#BBCF00" text-anchor="middle" letter-spacing="14">TENNIS ACADEMY</text>
+  </svg>
+</template>
+<nav class="nav">
+  <a href="index.html" aria-label="NextGen Tennis Academy"><img class="nav-logo" src="assets/brand/logo-white.png" alt="NextGen Tennis Academy"></a>
+  <div class="nav-links">
+    <a href="programme.html">Programme</a>
+    <a href="coaches.html">Trainer</a>
+    <a href="anlage.html">Standort</a>
+    <a href="galerie.html">Galerie</a>
+    <a href="news.html">News</a>
+    <a href="mitgliedschaft.html">Preise</a>
+    <a href="kontakt.html">Kontakt</a>
+  </div>
+  <div class="nav-right">
+    <a href="kontakt.html" class="btn btn-primary" data-magnetic="0.25">Training anfragen <span class="arrow">→</span></a>
+  </div>
+  <button class="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/brand/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-scrim"></div>
+  <div class="court-lines"></div>
+  <span class="hero-side">NextGen · Performance · Est. 2025</span>
+  <div class="wrap hero-in">
+    <p class="eyebrow on-dark" data-reveal style="margin-bottom:1.4rem;">Leistungstennis · Hallein · Salzburg</p>
+    <h1>
+      <span class="line-mask"><span>Die nächste</span></span>
+      <span class="line-mask"><span>Generation</span></span>
+      <span class="line-mask"><span>beginnt hier<span class="ball"></span></span></span>
+    </h1>
+    <p class="hlead" data-reveal>Die NextGen Tennisacademy ist die spezialisierte Leistungsförderung der Lindenbauer Tennis Academy in Hallein — für die größten Talente von morgen, gemeinsam mit Ex-Profi Jakob Aichhorn.</p>
+    <div class="hero-cta" data-reveal>
+      <a href="kontakt.html" class="btn btn-primary" data-magnetic="0.2">Training anfragen <span class="arrow">→</span></a>
+      <a href="programme.html" class="btn btn-ghost-light">Programme entdecken</a>
+    </div>
+  </div>
+</header>
+
+<!-- STAT BAR -->
+<section class="statbar">
+  <div class="wrap statbar-in">
+    <div class="stat"><div class="n"><span data-count="5">0</span></div><div class="c">Sandplätze</div></div>
+    <div class="stat"><div class="n"><span data-count="3">0</span></div><div class="c">Hallenplätze</div></div>
+    <div class="stat"><div class="n"><span data-count="3">0</span></div><div class="c">Coaches im Team</div></div>
+    <div class="stat"><div class="n">1:<span data-count="4">0</span></div><div class="c">max. Gruppengröße</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee petrol" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Aufschlag</span><span class="sep">/</span><span>Vorhand</span><span class="sep">/</span><span>Mindset</span><span class="sep">/</span><span>Athletik</span><span class="sep">/</span><span>Strategie</span><span class="sep">/</span><span>Next Gen</span><span class="sep">/</span>
+    <span>Aufschlag</span><span class="sep">/</span><span>Vorhand</span><span class="sep">/</span><span>Mindset</span><span class="sep">/</span><span>Athletik</span><span class="sep">/</span><span>Strategie</span><span class="sep">/</span><span>Next Gen</span><span class="sep">/</span>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<section class="section">
+  <div class="wrap split">
+    <div data-reveal>
+      <p class="eyebrow" style="margin-bottom:1.2rem;">LTA wird NextGen</p>
+      <h2 class="h2">Spezialisiert<br>auf Leistung<span class="dot">.</span></h2>
+      <p class="lead" style="margin-top:1.4rem;">Die NextGen Tennisacademy ist die spezialisierte Leistungsakademie der LTA in Hallein — gemeinsam aufgebaut von Alexander Lindenbauer und Ex-Profi Jakob Aichhorn. Wir richten uns an talentierte Nachwuchsspieler mit großem Potenzial und arbeiten ganzheitlich an Technik, Taktik, Mentalstärke und Athletik.</p>
+      <div class="flex gap-l wrap-flex" style="margin-top:2rem;">
+        <div><div class="n" style="font-family:var(--font-display);font-style:italic;font-weight:900;font-size:2.6rem;color:var(--ng-petrol);line-height:0.85;">2025</div><div class="mono" style="font-size:0.72rem;letter-spacing:0.1em;color:var(--ng-slate);text-transform:uppercase;margin-top:0.4rem;">gegründet</div></div>
+        <div><div class="n" style="font-family:var(--font-display);font-style:italic;font-weight:900;font-size:2.6rem;color:var(--ng-petrol);line-height:0.85;">1:4</div><div class="mono" style="font-size:0.72rem;letter-spacing:0.1em;color:var(--ng-slate);text-transform:uppercase;margin-top:0.4rem;">max. Gruppe</div></div>
+      </div>
+    </div>
+    <div class="court-media" data-parallax="0.06" style="min-height:440px;" data-reveal>
+      <div class="court-lines"></div>
+      <img class="media-mark" src="assets/brand/ng-mark.png" alt="">
+      <span class="media-tag">FOTO · LEISTUNGSTRAINING AM SANDPLATZ</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section class="section section--paper2">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow" style="margin-bottom:0.9rem;">Vier Wege · ein Ziel</p>
+        <h2 class="h2">Programme</h2>
+      </div>
+      <a href="programme.html" class="btn btn-ghost">Alle Programme <span class="arrow">→</span></a>
+    </div>
+    <div class="prog-grid" data-reveal-stagger>
+      <a href="programme.html" class="prog">
+        <div class="media court-media"><div class="court-lines"></div></div>
+        <div class="body"><span class="idx">01 · Der Klassiker</span><h3>Trainerstunde</h3><p>Perfekt für den Einstieg — individuelles Training nach deinen Wünschen. Regelmäßigkeit bringt sichtbaren Erfolg.</p><span class="go">Mehr erfahren →</span></div>
+      </a>
+      <a href="programme.html" class="prog">
+        <div class="media court-media"><div class="court-lines"></div></div>
+        <div class="body"><span class="idx">02 · Athletik</span><h3>Kondition</h3><p>Tennisspezifische Übungen für alle, die am Platz fitter werden wollen. In Gruppen bis zu acht Spielern.</p><span class="go">Mehr erfahren →</span></div>
+      </a>
+      <a href="programme.html" class="prog">
+        <div class="media court-media"><div class="court-lines"></div></div>
+        <div class="body"><span class="idx">03 · Leistungssport</span><h3>NextGen Performance</h3><p>Das spezialisierte Leistungsprogramm: ganzheitliche, individuelle Förderung für ambitionierte Talente.</p><span class="go">Mehr erfahren →</span></div>
+      </a>
+      <a href="programme.html" class="prog">
+        <div class="media court-media"><div class="court-lines"></div></div>
+        <div class="body"><span class="idx">04 · Nachwuchs</span><h3>Jugendförderung</h3><p>Wir bringen die Jugendarbeit im Leistungstennis in Salzburg auf ein neues Level — vom ersten Schlag bis zur Meisterschaft.</p><span class="go">Mehr erfahren →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FACILITY (dark) -->
+<section class="section section--dark">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="eyebrow on-dark" style="margin-bottom:0.9rem;">Ein Verein · eine Academy</p>
+        <h2 class="h2">Trainieren am<br>1. Halleiner TC.</h2>
+      </div>
+      <p class="sub">Unsere Heimat: der 1. Halleiner Tennisclub. Fünf Sandplätze im Freien, drei Teppich-Granulat-Hallenplätze und eine Kraftkammer direkt an der Anlage — ganzjährig ideale Bedingungen.</p>
+    </div>
+    <div class="feat-grid" data-reveal-stagger>
+      <div class="court-media big"><div class="court-lines"></div><img class="media-mark" src="assets/brand/ng-mark.png" alt=""><span class="media-tag">1. HALLEINER TENNISCLUB</span></div>
+      <div class="court-media"><div class="court-lines"></div><span class="media-tag">5 SANDPLÄTZE OUTDOOR</span></div>
+      <div class="court-media"><div class="court-lines"></div><span class="media-tag">3 HALLENPLÄTZE</span></div>
+    </div>
+    <div style="text-align:center;margin-top:2.4rem;" data-reveal>
+      <a href="anlage.html" class="btn btn-ghost-light" data-magnetic="0.2">Standort ansehen <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- COACHES -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div><p class="eyebrow" style="margin-bottom:0.9rem;">Das Trainerteam</p><h2 class="h2">Geführt von Profis</h2></div>
+      <a href="coaches.html" class="btn btn-ghost">Alle Trainer <span class="arrow">→</span></a>
+    </div>
+    <div class="coach-row" data-reveal-stagger>
+      <a href="coaches.html" class="coach"><div class="ph court-media"><div class="court-lines"></div><img class="media-mark" src="assets/brand/ng-mark.png" alt=""></div><h4>Alexander Lindenbauer</h4><p class="role">Head Coach · Gründer</p></a>
+      <a href="coaches.html" class="coach"><div class="ph court-media"><div class="court-lines"></div></div><h4>Jakob Aichhorn</h4><p class="role">Ex-Profi · Performance</p></a>
+      <a href="coaches.html" class="coach"><div class="ph court-media"><div class="court-lines"></div></div><h4>Robert Eckschlager</h4><p class="role">Athletik on &amp; off court</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- CHAMPIONS -->
+<section class="section section--paper2">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div><p class="eyebrow" style="margin-bottom:0.9rem;">Was uns ausmacht</p><h2 class="h2">Ganzheitlich denken</h2></div>
+    </div>
+    <div data-reveal-stagger>
+      <div class="champ-row"><span class="rank">01</span><span class="name">Technik &amp; Taktik</span><span class="cmeta">Saubere Schläge, kluges Spiel — Entwicklung am Platz</span></div>
+      <div class="champ-row"><span class="rank">02</span><span class="name">Mentalstärke</span><span class="cmeta">Der Kopf entscheidet über Sieg und Niederlage</span></div>
+      <div class="champ-row"><span class="rank">03</span><span class="name">Athletik</span><span class="cmeta">Betreuung on &amp; off court mit Robert Eckschlager</span></div>
+      <div class="champ-row"><span class="rank">04</span><span class="name">Individuell</span><span class="cmeta">Jeder Spieler, sein eigener Entwicklungsplan</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band" data-reveal>
+      <div class="court-lines"></div>
+      <div class="cta-band-in">
+        <div>
+          <p class="eyebrow on-dark" style="margin-bottom:1rem;">Dein erster Aufschlag</p>
+          <h2 class="h2">Komm auf den Court<span class="dot">.</span></h2>
+        </div>
+        <div>
+          <p class="lead on-dark" style="margin-bottom:1.6rem;max-width:34ch;">Kontaktiere uns für eine Trainingseinheit nach deinen Wünschen — wir finden das passende Programm für dich.</p>
+          <div class="flex gap-m wrap-flex">
+            <a href="kontakt.html" class="btn btn-primary" data-magnetic="0.2">Training anfragen <span class="arrow">→</span></a>
+            <a href="mitgliedschaft.html" class="btn btn-ghost-light">Preise ansehen</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-huge" data-reveal>NextGen<span class="dot">.</span></div>
+    <div class="footer-top">
+      <div>
+        <img class="flogo" src="assets/brand/logo-white.png" alt="NextGen Tennisacademy">
+        <p style="max-width:34ch;">Spezialisierte Leistungsförderung für die nächste Generation. Hallein · Salzburg.</p>
+      </div>
+      <div><h5>Navigation</h5><a href="programme.html">Programme</a><a href="coaches.html">Trainer</a><a href="anlage.html">Standort</a><a href="galerie.html">Galerie</a><a href="news.html">News</a><a href="mitgliedschaft.html">Preise</a></div>
+      <div><h5>Kontakt</h5><p>1. Halleiner Tennisclub<br>Hallein · Salzburg</p><a href="mailto:office@nextgen-tennisacademy.at">office@nextgen-tennisacademy.at</a></div>
+      <div><h5>Social</h5><a href="kontakt.html">Instagram</a><a href="kontakt.html">Facebook</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NextGen Tennisacademy</span><span>Hallein · Salzburg</span><span>Impressum · Datenschutz</span></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+  (function () {
+    const hero = document.getElementById('hero');
+    const go = () => hero.classList.add('loaded');
+    requestAnimationFrame(() => requestAnimationFrame(go));
+    setTimeout(go, 120);
+  })();
+  document.querySelectorAll('.nav-links a').forEach(a => { if (a.getAttribute('href') === 'index.html') a.classList.add('active'); });
+</script>
+</body>
+</html>

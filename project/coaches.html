@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trainer — NextGen Tennis Academy</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="assets/brand/ng-mark.png">
+<style>
+.coach-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1.4rem, 3vw, 2.4rem); }
+@media (max-width: 760px) { .coach-grid { grid-template-columns: 1fr; } }
+.coach-card { background: #fff; border: 1px solid var(--ng-line); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease); display: grid; grid-template-columns: 0.85fr 1fr; }
+.coach-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.coach-card .ph { position: relative; min-height: 320px; }
+.coach-card .court-lines { inset: 16% 14%; transition: transform 0.4s var(--ease); }
+.coach-card:hover .court-lines { transform: scale(1.05); }
+.coach-card .body { padding: 1.8rem; display: flex; flex-direction: column; }
+.coach-card .role { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ng-lime-600); }
+.coach-card h3 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 1.9rem; color: var(--ng-petrol); line-height: 0.95; margin: 0.5rem 0 0.8rem; }
+.coach-card p { color: var(--ng-slate); font-size: 0.95rem; line-height: 1.55; margin: 0; }
+.coach-card .creds { margin-top: auto; padding-top: 1.2rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+@media (max-width: 480px) { .coach-card { grid-template-columns: 1fr; } .coach-card .ph { min-height: 200px; } }
+.coach-card { cursor: pointer; }
+.coach-card .more { margin-top: 1.1rem; font-weight: 800; font-size: 0.85rem; color: var(--ng-petrol); display: inline-flex; align-items: center; gap: 0.45em; }
+.coach-card .more .arrow { transition: transform 0.25s var(--ease); color: var(--ng-lime-600); }
+.coach-card:hover .more .arrow { transform: translateX(4px); }
+
+/* ===== Coach profile overlay ===== */
+.coach-modal { position: fixed; inset: 0; z-index: 1200; display: none; }
+.coach-modal.open { display: block; }
+.cm-backdrop { position: absolute; inset: 0; background: rgba(8,26,32,0.8); backdrop-filter: blur(10px); }
+.cm-panel { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: min(1060px, calc(100vw - 2rem)); max-height: calc(100dvh - 3rem); background: #fff; border-radius: var(--r-xl); overflow: hidden; display: grid; grid-template-columns: 0.78fr 1.22fr; box-shadow: var(--shadow-lg); }
+@media (prefers-reduced-motion: no-preference) {
+  .coach-modal.open .cm-panel { animation: cmIn 0.32s var(--ease) both; }
+  @keyframes cmIn { from { opacity: 0; transform: translate(-50%, calc(-50% + 18px)) skewY(0.6deg); } to { opacity: 1; transform: translate(-50%,-50%); } }
+}
+.cm-media { border-radius: 0; min-height: 100%; }
+.cm-body { overflow-y: auto; padding: clamp(1.6rem, 4vw, 3rem); }
+.cm-close { position: absolute; top: 14px; right: 14px; z-index: 5; width: 44px; height: 44px; border-radius: var(--r-pill); border: none; cursor: pointer; background: var(--ng-petrol); color: #fff; font-size: 1.3rem; line-height: 1; display: grid; place-items: center; transition: background 0.2s var(--ease), transform 0.2s var(--ease); }
+.cm-close:hover { background: var(--ng-petrol-700); transform: rotate(90deg); }
+.cm-close:active { transform: scale(0.97); }
+.cm-profile { display: none; }
+.cm-profile.active { display: block; }
+.cm-profile .role { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ng-lime-600); }
+.cm-profile h2 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; line-height: 0.92; color: var(--ng-petrol); font-size: clamp(2.1rem, 1.5rem + 2.4vw, 3.4rem); margin: 0.5rem 0 1.1rem; }
+.cm-profile .cm-lead { font-size: 1.08rem; line-height: 1.5; color: var(--ng-ink); font-weight: 600; margin: 0 0 1.4rem; }
+.cm-profile p { color: var(--ng-slate); font-size: 0.98rem; line-height: 1.65; margin: 0 0 1rem; }
+.cm-profile p.cm-strong { color: var(--ng-petrol); font-weight: 700; }
+.cm-stats { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ng-line); border-radius: var(--r-md); overflow: hidden; margin: 0 0 1.5rem; }
+.cm-stats .st { padding: 0.9rem 1rem; border-right: 1px solid var(--ng-line); border-bottom: 1px solid var(--ng-line); }
+.cm-stats .st:nth-child(3n) { border-right: none; }
+.cm-stats .st:nth-last-child(-n+3) { border-bottom: none; }
+.cm-stats .n { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 1.45rem; color: var(--ng-petrol); line-height: 1; }
+.cm-stats .c { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ng-slate); margin-top: 0.35rem; }
+.cm-foot { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; margin-top: 1.6rem; }
+@media (max-width: 760px) {
+  .cm-panel { grid-template-columns: 1fr; max-height: calc(100dvh - 1.5rem); width: calc(100vw - 1.5rem); overflow-y: auto; display: block; }
+  .cm-media { min-height: 220px; height: 220px; }
+  .cm-stats { grid-template-columns: repeat(2, 1fr); }
+  .cm-stats .st:nth-child(3n) { border-right: 1px solid var(--ng-line); }
+  .cm-stats .st:nth-child(2n) { border-right: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" aria-label="NextGen Tennis Academy"><img class="nav-logo" src="assets/brand/logo-white.png" alt="NextGen Tennis Academy"></a>
+  <div class="nav-links"><a href="programme.html">Programme</a><a href="coaches.html">Trainer</a><a href="anlage.html">Standort</a><a href="galerie.html">Galerie</a><a href="news.html">News</a><a href="mitgliedschaft.html">Preise</a><a href="kontakt.html">Kontakt</a></div>
+  <div class="nav-right"><a href="kontakt.html" class="btn btn-primary" data-magnetic="0.25">Training anfragen <span class="arrow">→</span></a></div>
+  <button class="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-head">
+  <div class="court-lines"></div>
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Start</a><span class="dot">/</span><span>Trainer</span></div>
+    <p class="eyebrow on-dark" data-reveal style="margin-bottom:1.2rem;">Das Team hinter NextGen</p>
+    <h1 data-reveal>Trainer<span class="dot">.</span></h1>
+    <p class="lead on-dark" data-reveal style="margin-top:1.4rem;max-width:54ch;">Lizenzierte Coaches, ein Ex-Profi und ein Athletiktrainer. Ein Team, das qualitativ hochwertige Betreuung für Spieler aller Leistungsstufen gewährleistet.</p>
+  </div>
+</header>
+
+<!-- STAT BAR -->
+<section class="statbar">
+  <div class="wrap statbar-in">
+    <div class="stat"><div class="n"><span data-count="3">0</span></div><div class="c">Coaches im Team</div></div>
+    <div class="stat"><div class="n"><span data-count="3">0</span></div><div class="c">Standorte</div></div>
+    <div class="stat"><div class="n">1:<span data-count="4">0</span></div><div class="c">max. Gruppe</div></div>
+    <div class="stat"><div class="n">2025</div><div class="c">gegründet</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="coach-grid" data-reveal-stagger>
+      <div class="coach-card" data-coach="alexander" role="button" tabindex="0" aria-haspopup="dialog">
+        <div class="ph court-media"><div class="court-lines"></div><img class="media-mark" src="assets/brand/ng-mark.png" alt=""></div>
+        <div class="body"><span class="role">Head Coach · Gründer</span><h3>Alexander Lindenbauer</h3><p>Staatlich geprüfter Tennislehrer mit MSc in Sport- und Bewegungswissenschaften. Treibende Kraft hinter der Academy und dem neuen Leistungskonzept.</p><div class="creds"><span class="tag">MSc Sportwiss.</span><span class="tag">Tennislehrer</span></div><span class="more">Porträt lesen <span class="arrow">→</span></span></div>
+      </div>
+      <div class="coach-card" data-coach="jakob" role="button" tabindex="0" aria-haspopup="dialog">
+        <div class="ph court-media"><div class="court-lines"></div></div>
+        <div class="body"><span class="role">Ex-Profi · Performance</span><h3>Jakob Aichhorn</h3><p>Ehemaliger Profispieler. Entwickelt gemeinsam mit der Academy das Konzept für die Förderung der nächsten Generation im Leistungstennis.</p><div class="creds"><span class="tag">Ex-Profi</span><span class="tag">Performance</span></div><span class="more">Porträt lesen <span class="arrow">→</span></span></div>
+      </div>
+      <div class="coach-card" data-coach="robert" role="button" tabindex="0" aria-haspopup="dialog">
+        <div class="ph court-media"><div class="court-lines"></div></div>
+        <div class="body"><span class="role">Athletiktrainer</span><h3>Robert Eckschlager</h3><p>Verantwortlich für die athletische Betreuung der Spieler on &amp; off court. Macht jeden Körper bereit für die Belastung im Leistungstennis.</p><div class="creds"><span class="tag">Athletik</span><span class="tag">On &amp; off court</span></div><span class="more">Porträt lesen <span class="arrow">→</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY band -->
+<section class="section section--dark">
+  <div class="wrap split" style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center;">
+    <div data-reveal>
+      <p class="eyebrow on-dark" style="margin-bottom:1.2rem;">Unser Versprechen</p>
+      <h2 class="h2" style="color:#fff;">Kein Spieler ist<br>nur eine Nummer</h2>
+      <p class="lead on-dark" style="margin-top:1.4rem;">Bei uns kennt jeder Trainer jeden Namen. Wir coachen Menschen, nicht Statistiken — und genau deshalb funktioniert die Entwicklung.</p>
+    </div>
+    <div class="court-media" data-reveal style="aspect-ratio:4/3;border-radius:var(--r-xl);"><div class="court-lines"></div><span class="media-tag">FOTO · TEAM AM CENTER COURT</span></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band" data-reveal style="display:flex;justify-content:space-between;align-items:center;gap:2.5rem;flex-wrap:wrap;">
+      <div class="court-lines"></div>
+      <div style="position:relative;z-index:2;"><p class="eyebrow on-dark" style="margin-bottom:0.9rem;">Lern uns kennen</p><h2 class="h2" style="color:#fff;">Triff dein Team<span class="dot">.</span></h2></div>
+      <div style="position:relative;z-index:2;"><a href="kontakt.html" class="btn btn-primary" data-magnetic="0.2">Training anfragen <span class="arrow">→</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- COACH PROFILE OVERLAY -->
+<div class="coach-modal" id="coachModal" aria-hidden="true" data-screen-label="Trainer-Porträt Overlay">
+  <div class="cm-backdrop" data-close="1"></div>
+  <div class="cm-panel" role="dialog" aria-modal="true" aria-label="Trainer-Porträt">
+    <button class="cm-close" data-close="1" aria-label="Schließen">✕</button>
+    <div class="cm-media court-media"><div class="court-lines"></div><img class="media-mark" src="assets/brand/ng-mark.png" alt=""><span class="media-tag" id="cmMediaTag">FOTO · TRAINER</span></div>
+    <div class="cm-body">
+
+      <article class="cm-profile" data-profile="jakob">
+        <span class="role">Trainer-Vorstellung · Ex-Profi · Performance</span>
+        <h2>Jakob Aichhorn<span class="dot">.</span></h2>
+        <p class="cm-lead">Wir freuen uns, euch unseren Trainer Jakob Aichhorn vorzustellen — beeindruckende Erfahrung auf und neben dem Platz.</p>
+        <div class="cm-stats">
+          <div class="st"><div class="n">946</div><div class="c">ATP-Karrierehoch</div></div>
+          <div class="st"><div class="n">Nr. 1</div><div class="c">Jugend Österreich</div></div>
+          <div class="st"><div class="n">Top 150</div><div class="c">Jugend international</div></div>
+          <div class="st"><div class="n">2021</div><div class="c">Österr. Meister</div></div>
+          <div class="st"><div class="n">2022</div><div class="c">Vizestaatsmeister</div></div>
+          <div class="st"><div class="n">6 Jahre</div><div class="c">Trainererfahrung</div></div>
+        </div>
+        <p>Jakob bringt sowohl auf als auch neben dem Platz eine beeindruckende Erfahrung mit. Als ehemaliger Profi erreichte er ein Karrierehoch von ATP-Rang 946. Bereits in seiner Jugend zählte er zu den erfolgreichsten österreichischen Spielern: Er war die Nummer 1 Österreichs und gehörte international zu den Top 150 der Jugendrangliste.</p>
+        <p>Auf nationaler Ebene konnte Jakob große Erfolge feiern: 2021 wurde er österreichischer Meister, 2022 österreichischer Vizestaatsmeister. Aktuell ist er weiterhin als aktiver Spieler in der österreichischen Bundesliga im Einsatz.</p>
+        <p>Neben seiner erfolgreichen Spielerkarriere ist Jakob seit mittlerweile sechs Jahren als Trainer tätig. Dabei arbeitet er mit Spielerinnen und Spielern aller Altersklassen und Leistungsstufen — vom Nachwuchs bis zum ambitionierten Turnierspieler. Mit seiner Erfahrung aus dem internationalen Spitzensport und seiner Leidenschaft für den Tennissport unterstützt er seine Schützlinge dabei, ihr volles Potenzial auszuschöpfen und ihre individuellen Ziele zu erreichen.</p>
+        <p class="cm-strong">Wir sind stolz, Jakob in unserem Trainerteam zu haben, und freuen uns darauf, gemeinsam mit ihm die nächste Generation von Tennisspielern zu fördern!</p>
+        <div class="cm-foot"><a href="kontakt.html" class="btn btn-primary">Training mit Jakob anfragen <span class="arrow">→</span></a></div>
+      </article>
+
+      <article class="cm-profile" data-profile="alexander">
+        <span class="role">Trainer-Vorstellung · Head Coach · Gründer</span>
+        <h2>Alexander Lindenbauer<span class="dot">.</span></h2>
+        <p class="cm-lead">Staatlich geprüfter Tennislehrer, Sportwissenschaftler — und die treibende Kraft hinter der NextGen Tennis Academy.</p>
+        <p>Alexander ist staatlich geprüfter Tennislehrer und hält einen MSc in Sport- und Bewegungswissenschaften. Als Gründer und Head Coach verantwortet er das Trainings- und Leistungskonzept der Academy — von der Nachwuchsförderung bis zum ambitionierten Turniertennis.</p>
+        <p>Sein Anspruch: jede Spielerin und jeden Spieler individuell kennen und gezielt weiterentwickeln. Bei NextGen ist kein Spieler nur eine Nummer.</p>
+        <div class="creds" style="display:flex;flex-wrap:wrap;gap:0.4rem;"><span class="tag">MSc Sportwiss.</span><span class="tag">Staatl. gepr. Tennislehrer</span><span class="tag">Gründer</span></div>
+        <div class="cm-foot"><a href="kontakt.html" class="btn btn-primary">Training mit Alexander anfragen <span class="arrow">→</span></a></div>
+      </article>
+
+      <article class="cm-profile" data-profile="robert">
+        <span class="role">Trainer-Vorstellung · Athletiktrainer</span>
+        <h2>Robert Eckschlager<span class="dot">.</span></h2>
+        <p class="cm-lead">Verantwortlich für die athletische Entwicklung unserer Spielerinnen und Spieler — on &amp; off court.</p>
+        <p>Robert betreut die Spielerinnen und Spieler der Academy in allen athletischen Belangen. Er bereitet jeden Körper gezielt auf die Belastungen im Leistungstennis vor — von der Grundlagenarbeit im Nachwuchs bis zur Vorbereitung ambitionierter Turnierspieler.</p>
+        <div class="creds" style="display:flex;flex-wrap:wrap;gap:0.4rem;"><span class="tag">Athletik</span><span class="tag">On &amp; off court</span></div>
+        <div class="cm-foot"><a href="kontakt.html" class="btn btn-primary">Training mit Robert anfragen <span class="arrow">→</span></a></div>
+      </article>
+
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-huge" data-reveal>NextGen<span class="dot">.</span></div>
+    <div class="footer-top">
+      <div><img class="flogo" src="assets/brand/logo-white.png" alt="NextGen Tennisacademy"><p style="max-width:34ch;">Spezialisierte Leistungsförderung für die nächste Generation. Hallein · Salzburg.</p></div>
+      <div><h5>Navigation</h5><a href="programme.html">Programme</a><a href="coaches.html">Trainer</a><a href="anlage.html">Standort</a><a href="galerie.html">Galerie</a><a href="news.html">News</a><a href="mitgliedschaft.html">Preise</a></div>
+      <div><h5>Kontakt</h5><p>1.&nbsp;Halleiner Tennisclub<br>Hallein · Salzburg</p><a href="mailto:office@nextgen-tennisacademy.at">office@nextgen-tennisacademy.at</a></div>
+      <div><h5>Social</h5><a href="kontakt.html">Instagram</a><a href="kontakt.html">Facebook</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NextGen Tennisacademy</span><span>Hallein · Salzburg</span><span>Impressum · Datenschutz</span></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>document.querySelectorAll('.nav-links a').forEach(a=>{if(a.getAttribute('href')==='coaches.html')a.classList.add('active');});</script>
+<script>
+(function(){
+  var modal = document.getElementById('coachModal');
+  var mediaTag = document.getElementById('cmMediaTag');
+  var names = { jakob: 'JAKOB AICHHORN', alexander: 'ALEXANDER LINDENBAUER', robert: 'ROBERT ECKSCHLAGER' };
+  var lastFocus = null;
+
+  function openCoach(id){
+    modal.querySelectorAll('.cm-profile').forEach(function(p){ p.classList.toggle('active', p.dataset.profile === id); });
+    if (mediaTag) mediaTag.textContent = 'FOTO · ' + (names[id] || 'TRAINER');
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lastFocus = document.activeElement;
+    var body = modal.querySelector('.cm-body'); if (body) body.scrollTop = 0;
+    var closeBtn = modal.querySelector('.cm-close'); if (closeBtn) closeBtn.focus();
+  }
+  function closeCoach(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('.coach-card[data-coach]').forEach(function(card){
+    card.addEventListener('click', function(){ openCoach(card.dataset.coach); });
+    card.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCoach(card.dataset.coach); } });
+  });
+  modal.addEventListener('click', function(e){ if (e.target.closest('[data-close]')) closeCoach(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.classList.contains('open')) closeCoach(); });
+})();
+</script>
+</body>
+</html>

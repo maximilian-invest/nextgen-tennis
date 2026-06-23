@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie — NextGen Tennisacademy</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="assets/brand/ng-mark.png">
+<style>
+/* ---------- FILTER BAR ---------- */
+.filterbar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.filter { font-family: var(--font-sans); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.02em; color: var(--ng-slate); background: #fff; border: 1.5px solid var(--ng-line); padding: 0.6rem 1.2rem; border-radius: var(--r-pill); transition: 0.18s var(--ease); }
+.filter:hover { border-color: var(--ng-lime); color: var(--ng-petrol); }
+.filter.on { background: var(--ng-petrol); color: #fff; border-color: var(--ng-petrol); }
+.filter .c { font-family: var(--font-mono); font-size: 0.7rem; opacity: 0.6; margin-left: 0.4rem; }
+
+/* ---------- MASONRY GRID ---------- */
+.gallery { column-count: 3; column-gap: 1.1rem; }
+@media (max-width: 880px) { .gallery { column-count: 2; } }
+@media (max-width: 540px) { .gallery { column-count: 1; } }
+.g-item { break-inside: avoid; margin-bottom: 1.1rem; position: relative; border-radius: var(--r-lg); overflow: hidden; cursor: pointer; display: block; }
+.g-item .court-media { width: 100%; }
+.g-item .court-lines { inset: 16% 13%; transition: transform 0.5s var(--ease); }
+.g-item:hover .court-lines { transform: scale(1.05); }
+.g-item .overlay { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.1rem 1.2rem; background: linear-gradient(180deg, transparent 45%, rgba(8,26,32,0.78) 100%); opacity: 0; transition: opacity 0.28s var(--ease); }
+.g-item:hover .overlay { opacity: 1; }
+.g-item .overlay .cat { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ng-lime); }
+.g-item .overlay .ttl { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 1.25rem; color: #fff; line-height: 0.98; margin-top: 0.2rem; }
+.g-item .plus { position: absolute; top: 1rem; right: 1rem; z-index: 3; width: 34px; height: 34px; border-radius: var(--r-pill); background: var(--ng-lime); color: var(--ng-petrol); display: grid; place-items: center; font-family: var(--font-display); font-style: italic; font-weight: 900; font-size: 1.3rem; transform: scale(0); transition: transform 0.25s var(--ease); }
+.g-item:hover .plus { transform: scale(1); }
+.g-item.hide { display: none; }
+
+/* aspect variety */
+.ar-tall .court-media { aspect-ratio: 3/4; }
+.ar-square .court-media { aspect-ratio: 1/1; }
+.ar-wide .court-media { aspect-ratio: 4/3; }
+.ar-land .court-media { aspect-ratio: 3/2; }
+
+/* ---------- LIGHTBOX ---------- */
+.lightbox { position: fixed; inset: 0; z-index: 99995; background: rgba(8,26,32,0.94); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: clamp(1rem, 5vw, 4rem); }
+.lightbox.open { display: flex; }
+.lb-stage { position: relative; width: min(960px, 100%); }
+.lb-media { position: relative; width: 100%; aspect-ratio: 3/2; border-radius: var(--r-xl); overflow: hidden; }
+.lb-media .court-lines { inset: 12% 9%; }
+.lb-cap { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: 1.2rem; flex-wrap: wrap; }
+.lb-cap .cat { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ng-lime); }
+.lb-cap .ttl { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: clamp(1.6rem, 1rem + 2vw, 2.6rem); color: #fff; line-height: 0.95; }
+.lb-cap .count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ng-on-dark-2); }
+.lb-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 56px; height: 56px; border-radius: var(--r-pill); background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.22); color: #fff; font-size: 1.5rem; display: grid; place-items: center; transition: 0.18s var(--ease); z-index: 2; }
+.lb-btn:hover { background: var(--ng-lime); color: var(--ng-petrol); border-color: var(--ng-lime); }
+.lb-prev { left: clamp(0.6rem, 3vw, 2.5rem); }
+.lb-next { right: clamp(0.6rem, 3vw, 2.5rem); }
+.lb-close { position: fixed; top: clamp(1rem, 3vw, 2rem); right: clamp(1rem, 3vw, 2rem); width: 48px; height: 48px; border-radius: var(--r-pill); background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.22); color: #fff; font-size: 1.3rem; display: grid; place-items: center; transition: 0.18s var(--ease); z-index: 2; }
+.lb-close:hover { background: var(--ng-lime); color: var(--ng-petrol); border-color: var(--ng-lime); }
+@media (max-width: 640px) { .lb-prev { left: 0.5rem; } .lb-next { right: 0.5rem; } .lb-btn { width: 44px; height: 44px; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" aria-label="NextGen Tennisacademy"><img class="nav-logo" src="assets/brand/logo-white.png" alt="NextGen Tennisacademy"></a>
+  <div class="nav-links"><a href="programme.html">Programme</a><a href="coaches.html">Trainer</a><a href="anlage.html">Standort</a><a href="galerie.html">Galerie</a><a href="news.html">News</a><a href="mitgliedschaft.html">Preise</a><a href="kontakt.html">Kontakt</a></div>
+  <div class="nav-right"><a href="kontakt.html" class="btn btn-primary" data-magnetic="0.25">Training anfragen <span class="arrow">→</span></a></div>
+  <button class="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-head">
+  <div class="court-lines"></div>
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Start</a><span class="dot">/</span><span>Galerie</span></div>
+    <p class="eyebrow on-dark" data-reveal style="margin-bottom:1.2rem;">Einblicke · 1. Halleiner TC</p>
+    <h1 data-reveal>Galerie<span class="dot">.</span></h1>
+    <p class="lead on-dark" data-reveal style="margin-top:1.4rem;max-width:54ch;">Plätze, Training und Team. Ein Blick auf das, was die NextGen Tennisacademy ausmacht — am 1. Halleiner Tennisclub in Salzburg.</p>
+  </div>
+</header>
+
+<section class="section" style="padding-top:clamp(2.5rem,4vw,4rem);">
+  <div class="wrap">
+
+    <div class="filterbar" data-reveal>
+      <button class="filter on" data-f="all">Alle<span class="c">12</span></button>
+      <button class="filter" data-f="hallein">Plätze<span class="c">06</span></button>
+      <button class="filter" data-f="training">Training<span class="c">04</span></button>
+      <button class="filter" data-f="team">Team<span class="c">02</span></button>
+    </div>
+
+    <div class="gallery" id="gallery" data-reveal-stagger>
+      <!-- items injected -->
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="Schließen">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Vorheriges">←</button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Nächstes">→</button>
+  <div class="lb-stage">
+    <div class="lb-media court-media"><div class="court-lines"></div><img class="media-mark" src="assets/brand/ng-mark.png" alt=""><span class="media-tag" id="lbTag">FOTO</span></div>
+    <div class="lb-cap">
+      <div><div class="cat" id="lbCat">Standort</div><div class="ttl" id="lbTtl">Titel</div></div>
+      <div class="count"><span id="lbIdx">1</span> / 12</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="section section--dark">
+  <div class="wrap" style="text-align:center;">
+    <p class="eyebrow on-dark" data-reveal style="margin-bottom:1rem;justify-content:center;">Mehr sehen</p>
+    <h2 class="h2" data-reveal style="color:#fff;">Komm vorbei und<br>spiel mit uns<span class="dot">.</span></h2>
+    <div data-reveal style="margin-top:2rem;"><a href="kontakt.html" class="btn btn-primary" data-magnetic="0.2">Training anfragen <span class="arrow">→</span></a></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-huge" data-reveal>NextGen<span class="dot">.</span></div>
+    <div class="footer-top">
+      <div><img class="flogo" src="assets/brand/logo-white.png" alt="NextGen Tennisacademy"><p style="max-width:34ch;">Spezialisierte Leistungsförderung für die nächste Generation. Hallein · Salzburg.</p></div>
+      <div><h5>Navigation</h5><a href="programme.html">Programme</a><a href="coaches.html">Trainer</a><a href="anlage.html">Standort</a><a href="galerie.html">Galerie</a><a href="news.html">News</a><a href="mitgliedschaft.html">Preise</a></div>
+      <div><h5>Kontakt</h5><p>1.&nbsp;Halleiner Tennisclub<br>Hallein · Salzburg</p><a href="mailto:office@nextgen-tennisacademy.at">office@nextgen-tennisacademy.at</a></div>
+      <div><h5>Social</h5><a href="kontakt.html">Instagram</a><a href="kontakt.html">Facebook</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NextGen Tennisacademy</span><span>Hallein · Salzburg</span><span>Impressum · Datenschutz</span></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+  document.querySelectorAll('.nav-links a').forEach(a=>{if(a.getAttribute('href')==='galerie.html')a.classList.add('active');});
+
+  // ---- gallery data ----
+  const ITEMS = [
+    { cat:'hallein',  catLabel:'Plätze',      ttl:'Sandplätze im Freien', tag:'1. HALLEINER TC · SANDPLÄTZE', ar:'ar-land' },
+    { cat:'training', catLabel:'Training',    ttl:'Trainerstunde',        tag:'EINZELTRAINING AM PLATZ',     ar:'ar-tall' },
+    { cat:'hallein',  catLabel:'Plätze',      ttl:'Center bei Flutlicht', tag:'1. HALLEINER TC · ABEND',     ar:'ar-square' },
+    { cat:'team',     catLabel:'Team',        ttl:'Alexander Lindenbauer', tag:'HEAD COACH · GRÜNDER',       ar:'ar-wide' },
+    { cat:'hallein',  catLabel:'Plätze',      ttl:'Teppich-Granulat-Halle', tag:'3 HALLENPLÄTZE',            ar:'ar-square' },
+    { cat:'training', catLabel:'Training',    ttl:'Aufschlagtraining',    tag:'TECHNIK AM PLATZ',            ar:'ar-tall' },
+    { cat:'training', catLabel:'Training',    ttl:'Konditionstraining',   tag:'ATHLETIK · GRUPPE',           ar:'ar-land' },
+    { cat:'hallein',  catLabel:'Plätze',      ttl:'Kraftkammer',          tag:'KRAFT & FITNESS',             ar:'ar-square' },
+    { cat:'hallein',  catLabel:'Plätze',      ttl:'Outdoor von Feb bis Nov', tag:'SANDPLATZ · OUTDOOR',       ar:'ar-wide' },
+    { cat:'team',     catLabel:'Team',        ttl:'Jakob Aichhorn',       tag:'EX-PROFI · PERFORMANCE',      ar:'ar-tall' },
+    { cat:'training', catLabel:'Training',    ttl:'Jugendförderung',      tag:'NACHWUCHS AM PLATZ',          ar:'ar-wide' },
+    { cat:'hallein',  catLabel:'Plätze',      ttl:'Sommerabend am Platz', tag:'1. HALLEINER TC · SOMMER',    ar:'ar-tall' },
+  ];
+
+  const gallery = document.getElementById('gallery');
+  gallery.innerHTML = ITEMS.map((it, i) => `
+    <a class="g-item ${it.ar}" data-cat="${it.cat}" data-i="${i}">
+      <div class="court-media"><div class="court-lines"></div><span class="media-tag">${it.tag}</span></div>
+      <span class="plus">+</span>
+      <div class="overlay"><span class="cat">${it.catLabel}</span><span class="ttl">${it.ttl}</span></div>
+    </a>`).join('');
+
+  // ---- filtering ----
+  let visible = ITEMS.map((_, i) => i);
+  document.querySelectorAll('.filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      const f = btn.dataset.f;
+      visible = [];
+      document.querySelectorAll('.g-item').forEach(el => {
+        const show = (f === 'all' || el.dataset.cat === f);
+        el.classList.toggle('hide', !show);
+        if (show) visible.push(+el.dataset.i);
+      });
+    });
+  });
+
+  // ---- lightbox ----
+  const lb = document.getElementById('lightbox');
+  const lbTag = document.getElementById('lbTag'), lbCat = document.getElementById('lbCat'),
+        lbTtl = document.getElementById('lbTtl'), lbCount = document.querySelector('.lb-cap .count');
+  let cur = 0;
+  const render = () => {
+    const it = ITEMS[visible[cur]];
+    lbTag.textContent = it.tag; lbCat.textContent = it.catLabel; lbTtl.textContent = it.ttl;
+    lbCount.textContent = (cur + 1) + ' / ' + visible.length;
+  };
+  const open = (i) => {
+    cur = visible.indexOf(i); if (cur < 0) cur = 0;
+    render();
+    lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
+  };
+  const step = (d) => { cur = (cur + d + visible.length) % visible.length; render(); };
+  const close = () => { lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); };
+
+  gallery.addEventListener('click', e => { const el = e.target.closest('.g-item'); if (el) open(+el.dataset.i); });
+  document.getElementById('lbNext').addEventListener('click', () => step(1));
+  document.getElementById('lbPrev').addEventListener('click', () => step(-1));
+  document.getElementById('lbClose').addEventListener('click', close);
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+</script>
+</body>
+</html>

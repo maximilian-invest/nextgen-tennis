@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme — NextGen Tennis Academy</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="assets/brand/ng-mark.png">
+<style>
+.prog-row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: center; padding-block: clamp(2.5rem, 5vw, 5rem); border-bottom: 1px solid var(--ng-line); }
+.prog-row:last-child { border-bottom: none; }
+.prog-row .media { position: relative; aspect-ratio: 4/3; border-radius: var(--r-xl); overflow: hidden; }
+.prog-row:nth-child(even) .media { order: 2; }
+.prog-row .court-lines { inset: 12% 10%; }
+.prog-row .num { font-family: var(--font-display); font-style: italic; font-weight: 900; font-size: 1.1rem; color: var(--ng-lime-600); }
+.prog-row h2 { font-family: var(--font-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: clamp(2rem, 1.4rem+2.4vw, 3.4rem); color: var(--ng-petrol); line-height: 0.92; margin: 0.6rem 0 1rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.4rem 0; }
+.feat-list { display: grid; gap: 0.7rem; margin: 1.4rem 0 1.8rem; }
+.feat-list li { list-style: none; display: flex; gap: 0.7rem; align-items: flex-start; color: var(--ng-slate); font-size: 0.98rem; }
+.feat-list li::before { content: ''; flex: none; width: 16px; height: 16px; margin-top: 3px; border-radius: 3px; background: var(--ng-lime); transform: skewX(-12deg); }
+.facts { display: flex; gap: 2rem; flex-wrap: wrap; padding-top: 1.2rem; border-top: 1px solid var(--ng-line); }
+.facts .f .v { font-family: var(--font-display); font-style: italic; font-weight: 900; font-size: 1.6rem; color: var(--ng-petrol); white-space: nowrap; }
+.facts .f .l { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ng-slate); }
+@media (max-width: 820px) { .prog-row { grid-template-columns: 1fr; } .prog-row:nth-child(even) .media { order: 0; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" aria-label="NextGen Tennis Academy"><img class="nav-logo" src="assets/brand/logo-white.png" alt="NextGen Tennis Academy"></a>
+  <div class="nav-links">
+    <a href="programme.html">Programme</a><a href="coaches.html">Trainer</a><a href="anlage.html">Standort</a><a href="galerie.html">Galerie</a><a href="news.html">News</a><a href="mitgliedschaft.html">Preise</a><a href="kontakt.html">Kontakt</a>
+  </div>
+  <div class="nav-right"><a href="kontakt.html" class="btn btn-primary" data-magnetic="0.25">Training anfragen <span class="arrow">→</span></a></div>
+  <button class="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- PAGE HEAD -->
+<header class="page-head">
+  <div class="court-lines"></div>
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Start</a><span class="dot">/</span><span>Programme</span></div>
+    <p class="eyebrow on-dark" data-reveal style="margin-bottom:1.2rem;">Trainerstunde · Kondition · Performance</p>
+    <h1 data-reveal>Programme<span class="dot">.</span></h1>
+    <p class="lead on-dark" data-reveal style="margin-top:1.4rem;max-width:54ch;">Vom Klassiker bis zur spezialisierten Leistungsförderung. Wähle das Training, das zu deinen Zielen passt — wir holen dich dort ab, wo du stehst.</p>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-track">
+  <span>Trainerstunde</span><span class="sep">/</span><span>Kondition</span><span class="sep">/</span><span>NextGen Performance</span><span class="sep">/</span><span>Jugendförderung</span><span class="sep">/</span>
+  <span>Trainerstunde</span><span class="sep">/</span><span>Kondition</span><span class="sep">/</span><span>NextGen Performance</span><span class="sep">/</span><span>Jugendförderung</span><span class="sep">/</span>
+</div></div>
+
+<!-- PROGRAMS -->
+<section class="section" style="padding-top:clamp(2rem,3vw,3rem);">
+  <div class="wrap">
+
+    <div class="prog-row" data-reveal>
+      <div class="media court-media"><div class="court-lines"></div><img class="media-mark" src="assets/brand/ng-mark.png" alt=""><span class="media-tag">FOTO · TRAINERSTUNDE AM PLATZ</span></div>
+      <div>
+        <span class="num">01 — Der Klassiker</span>
+        <h2>Trainerstunde</h2>
+        <div class="chips"><span class="tag">Einzel &amp; Gruppe</span><span class="tag">Alle Level</span><span class="tag">Nach Wunsch</span></div>
+        <p class="lead" style="font-size:1.05rem;">Perfekt für den Einstieg und um uns kennenzulernen. Nimm Kontakt auf und buche eine Trainingseinheit ganz nach deinen Wünschen. Für sichtbare Erfolge ist eine gewisse Regelmäßigkeit entscheidend.</p>
+        <ul class="feat-list">
+          <li>Einzeln oder in Gruppen bis vier Spieler</li>
+          <li>Individuelle Schwerpunkte nach Absprache</li>
+          <li>Flexible Termine am 1. Halleiner Tennisclub</li>
+        </ul>
+        <div class="facts">
+          <div class="f"><div class="v">ab 15€</div><div class="l">pro Stunde</div></div>
+          <div class="f"><div class="v">1–4</div><div class="l">Spieler</div></div>
+          <div class="f"><div class="v">flexibel</div><div class="l">Termine</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-row" data-reveal>
+      <div class="media court-media"><div class="court-lines"></div><span class="media-tag">FOTO · KONDITIONSTRAINING</span></div>
+      <div>
+        <span class="num">02 — Athletik</span>
+        <h2>Kondition</h2>
+        <div class="chips"><span class="tag">max. 8 Teilnehmer</span><span class="tag">Tennisspezifisch</span><span class="tag">Fitness</span></div>
+        <p class="lead" style="font-size:1.05rem;">Für alle, die nicht unbedingt am Tennisspiel arbeiten, sich aber dennoch am Platz verbessern wollen. Unsere speziell für den Tennissport angepassten Übungen heben deine körperliche Fitness — und damit dein Spiel — auf ein neues Niveau.</p>
+        <ul class="feat-list">
+          <li>Tennisspezifische Kraft, Schnelligkeit &amp; Koordination</li>
+          <li>Gruppen von 1 bis 8 Teilnehmern</li>
+          <li>Kraftkammer direkt an der Anlage in Hallein</li>
+        </ul>
+        <div class="facts">
+          <div class="f"><div class="v">ab 10€</div><div class="l">pro Stunde</div></div>
+          <div class="f"><div class="v">max 8</div><div class="l">Teilnehmer</div></div>
+          <div class="f"><div class="v">ganzjährig</div><div class="l">verfügbar</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-row" data-reveal>
+      <div class="media court-media"><div class="court-lines"></div><img class="media-mark" src="assets/brand/ng-mark.png" alt=""><span class="media-tag">FOTO · LEISTUNGSTRAINING</span></div>
+      <div>
+        <span class="num">03 — Leistungssport</span>
+        <h2>NextGen Performance</h2>
+        <div class="chips"><span class="tag">Nachwuchs</span><span class="tag">Leistungstennis</span><span class="tag">Individuell</span></div>
+        <p class="lead" style="font-size:1.05rem;">Das neue Konzept für Leistungsspieler. Gemeinsam mit Ex-Profi Jakob Aichhorn entwickeln wir die bestmögliche Förderung für die Entwicklung von Nachwuchstalenten — ganzheitlich und individuell.</p>
+        <ul class="feat-list">
+          <li>Technische, taktische &amp; mentale Entwicklung</li>
+          <li>Körperliche Betreuung on &amp; off court mit Robert Eckschlager</li>
+          <li>Individueller Entwicklungsplan pro Spieler</li>
+        </ul>
+        <div class="facts">
+          <div class="f"><div class="v">2025</div><div class="l">Start</div></div>
+          <div class="f"><div class="v">1:4</div><div class="l">max. Gruppe</div></div>
+          <div class="f"><div class="v">auf Anfrage</div><div class="l">Aufnahme</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-row" data-reveal>
+      <div class="media court-media"><div class="court-lines"></div><span class="media-tag">FOTO · JUGENDTRAINING</span></div>
+      <div>
+        <span class="num">04 — Nachwuchs</span>
+        <h2>Jugendförderung</h2>
+        <div class="chips"><span class="tag">Kinder &amp; Jugend</span><span class="tag">Meisterschaft</span><span class="tag">Vereine</span></div>
+        <p class="lead" style="font-size:1.05rem;">Die Förderung der Jugend steht bei uns an oberster Stelle. Am 1. Halleiner Tennisclub werden alle Meisterschaftsspieler finanziell beim Training unterstützt.</p>
+        <ul class="feat-list">
+          <li>Finanzielle Unterstützung für Meisterschaftsspieler</li>
+          <li>Strukturierte Nachwuchsförderung im Verein</li>
+          <li>Strukturierter Weg vom Anfänger bis ins Meisterschaftsteam</li>
+        </ul>
+        <div class="facts">
+          <div class="f"><div class="v">Jugend</div><div class="l">im Fokus</div></div>
+          <div class="f"><div class="v">Förderung</div><div class="l">Meisterschaft</div></div>
+          <div class="f"><div class="v">alle</div><div class="l">Altersklassen</div></div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="section section--dark">
+  <div class="wrap">
+    <div class="section-head" data-reveal><div><p class="eyebrow on-dark" style="margin-bottom:0.9rem;">Die Methode</p><h2 class="h2">So trainieren wir</h2></div></div>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:1.2rem;" data-reveal-stagger>
+      <div class="card on-dark" style="padding:1.8rem;"><div class="mono" style="color:var(--ng-lime);font-size:0.8rem;margin-bottom:0.8rem;">01</div><h3 class="h3" style="color:#fff;font-size:1.4rem;">Technik &amp; Taktik</h3><p class="lead on-dark" style="font-size:0.98rem;margin-top:0.6rem;">Saubere Schläge und kluges Spiel. Wir bauen das Fundament, auf dem alles andere wachsen kann.</p></div>
+      <div class="card on-dark" style="padding:1.8rem;"><div class="mono" style="color:var(--ng-lime);font-size:0.8rem;margin-bottom:0.8rem;">02</div><h3 class="h3" style="color:#fff;font-size:1.4rem;">Athletik</h3><p class="lead on-dark" style="font-size:0.98rem;margin-top:0.6rem;">Tennisspezifische Fitness on &amp; off court — betreut von Athletiktrainer Robert Eckschlager.</p></div>
+      <div class="card on-dark" style="padding:1.8rem;"><div class="mono" style="color:var(--ng-lime);font-size:0.8rem;margin-bottom:0.8rem;">03</div><h3 class="h3" style="color:#fff;font-size:1.4rem;">Mentalstärke</h3><p class="lead on-dark" style="font-size:0.98rem;margin-top:0.6rem;">Der Kopf entscheidet. Wir entwickeln die mentale Seite, die im Match den Unterschied macht.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band" data-reveal style="display:flex;justify-content:space-between;align-items:center;gap:2.5rem;flex-wrap:wrap;">
+      <div class="court-lines"></div>
+      <div style="position:relative;z-index:2;"><p class="eyebrow on-dark" style="margin-bottom:0.9rem;">Unsicher, welches Programm?</p><h2 class="h2" style="color:#fff;">Wir finden deins<span class="dot">.</span></h2></div>
+      <div style="position:relative;z-index:2;"><a href="kontakt.html" class="btn btn-primary" data-magnetic="0.2">Beratung anfragen <span class="arrow">→</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-huge" data-reveal>NextGen<span class="dot">.</span></div>
+    <div class="footer-top">
+      <div><img class="flogo" src="assets/brand/logo-white.png" alt="NextGen Tennisacademy"><p style="max-width:34ch;">Spezialisierte Leistungsförderung für die nächste Generation. Hallein · Salzburg.</p></div>
+      <div><h5>Navigation</h5><a href="programme.html">Programme</a><a href="coaches.html">Trainer</a><a href="anlage.html">Standort</a><a href="galerie.html">Galerie</a><a href="news.html">News</a><a href="mitgliedschaft.html">Preise</a></div>
+      <div><h5>Kontakt</h5><p>1.&nbsp;Halleiner Tennisclub<br>Hallein · Salzburg</p><a href="mailto:office@nextgen-tennisacademy.at">office@nextgen-tennisacademy.at</a></div>
+      <div><h5>Social</h5><a href="kontakt.html">Instagram</a><a href="kontakt.html">Facebook</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NextGen Tennisacademy</span><span>Hallein · Salzburg</span><span>Impressum · Datenschutz</span></div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>document.querySelectorAll('.nav-links a').forEach(a=>{if(a.getAttribute('href')==='programme.html')a.classList.add('active');});</script>
+</body>
+</html>
